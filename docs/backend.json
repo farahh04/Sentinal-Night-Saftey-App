@@ -1,0 +1,106 @@
+
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Extended user profile information including emergency data.",
+      "type": "object",
+      "properties": {
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "bloodGroup": { "type": "string" },
+        "allergies": { "type": "string" },
+        "medicalConditions": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "PoliceStation": {
+      "title": "Police Station",
+      "description": "Information about a local police station in Pakistan.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "city": { "type": "string" },
+        "sector": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "phone": { "type": "string" },
+        "email": { "type": "string" },
+        "areaType": { "type": "string", "enum": ["HIGH_PRIORITY", "STANDARD", "HIGH_RISK"] }
+      },
+      "required": ["name", "city", "lat", "lng"]
+    },
+    "SafetyVolunteer": {
+      "title": "Safety Volunteer",
+      "description": "A community member registered to respond to nearby emergencies.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "phone": { "type": "string" },
+        "cnic": { "type": "string" },
+        "isVerified": { "type": "boolean" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "radius": { "type": "number" }
+      }
+    },
+    "Incident": {
+      "title": "Incident",
+      "description": "An active emergency event reported by a user.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "type": { "type": "string", "enum": ["harassment", "robbery", "animal_attack", "medical", "general"] },
+        "status": { "type": "string", "enum": ["active", "dispatched", "resolved"] },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "policeNotified": { "type": "boolean" },
+        "severity": { "type": "string" }
+      }
+    },
+    "Walk": {
+      "title": "Walk History",
+      "description": "A record of a completed or active walk.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "origin": { "type": "string" },
+        "destination": { "type": "string" },
+        "distance": { "type": "number" },
+        "duration": { "type": "number" },
+        "safetyScore": { "type": "number" },
+        "completed": { "type": "boolean" },
+        "sosTriggered": { "type": "boolean" },
+        "date": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["google", "password"]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "#/backend/entities/User",
+      "description": "Individual user settings and emergency profiles."
+    },
+    "/walks/{walkId}": {
+      "schema": "#/backend/entities/Walk",
+      "description": "Historical data for all user walks."
+    },
+    "/incidents/{incidentId}": {
+      "schema": "#/backend/entities/Incident",
+      "description": "Live and historical safety incidents."
+    },
+    "/policeStations/{stationId}": {
+      "schema": "#/backend/entities/PoliceStation",
+      "description": "Station database for Pakistan."
+    }
+  }
+}
